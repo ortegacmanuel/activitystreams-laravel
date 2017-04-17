@@ -20,7 +20,7 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
      */
     public function boot() {
 
-        //$this->handleConfigs();
+        $this->handleConfigs();
         $this->handleMigrations();
         // $this->handleViews();
         // $this->handleTranslations();
@@ -35,7 +35,7 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
     public function register() {
 
         // Bind any implementations.
-
+        $this->registerActivities();
     }
 
     /**
@@ -50,11 +50,11 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
 
     private function handleConfigs() {
 
-        $configPath = __DIR__ . '/../config/packagename.php';
+        $configPath = __DIR__ . '/../config/activitystreams-laravel.php';
 
-        $this->publishes([$configPath => config_path('packagename.php')]);
+        $this->publishes([$configPath => config_path('activitystreams-laravel.php')]);
 
-        $this->mergeConfigFrom($configPath, 'packagename');
+        $this->mergeConfigFrom($configPath, 'activitystreams-laravel');
     }
 
     private function handleTranslations() {
@@ -78,4 +78,17 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
 
         include __DIR__.'/../routes.php';
     }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function registerActivities()
+    {
+        $this->app->bind('activities', function($app)
+        {
+            return new Activity();
+        });
+    }    
 }
