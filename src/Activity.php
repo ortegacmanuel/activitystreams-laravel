@@ -16,7 +16,15 @@ class Activity extends Model
     	'uri',
         'object_type',
         'verb',
+        'content',
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['created_at'];    
 
     public function actor()
     {
@@ -31,12 +39,13 @@ class Activity extends Model
         return $this->morphTo();
     }
 
-    public function createActivity($user, $model)
+    public function createActivity($verb = 'post', $user, $model, $content = '')
     {
         $activity = new Activity([
-            'uri' => 'tag:postactiv.local,2017-04-15:noticeId=1:objectType=note',
-            'verb' => 'http://activitystrea.ms/schema/1.0/post',
-            'object_type' => 'http://activitystrea.ms/schema/1.0/note'
+            'uri' => ActivityUtils::generateUri($model),
+            'verb' => ActivityVerb::canonical($verb),
+            'object_type' => ActivityObject::canonicalType($model->activityStreamsObjectType),
+            'content' => $content
         ]);
 
         $activity->actor()->associate($user);
@@ -46,4 +55,23 @@ class Activity extends Model
 
         return $activity;
     }
+
+    public function asArray()
+    {
+        $object = Array();
+        $object['actor'] = $this->actor->asArray();
+        $object['content'] = $this->content;
+        $object['id'] = $this->uri;
+        $object['object'] = $this->objectable->asArray();
+        $object['published'] = $this->created_at->format('Y-m-d\TH:i:sP');
+        $object['verb'] = $this->verb;
+        $object['url'] = $this->activityStreamsUrl;        
+        
+        return $object;
+    }
+
+    public function getActivityStreamsUrlAttribute()
+    {
+        return null;
+    }   
 }

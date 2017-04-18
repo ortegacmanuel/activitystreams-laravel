@@ -16,6 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
             $table->string('uri', 191)->nullable();
+            $table->text('content')->nullable();            
             $table->string('object_type', 191)->nullable();
             $table->string('verb', 191)->nullable();            
             $table->integer('user_id')->unsigned()->index();

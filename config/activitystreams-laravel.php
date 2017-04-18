@@ -9,4 +9,6 @@ return array(
   |
   */
   'actor_model' => 'App\User',
+
+  'domain' => env('APP_DOMAIN', 'example.org'),
 );
