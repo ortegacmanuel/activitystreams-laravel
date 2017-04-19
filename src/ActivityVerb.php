@@ -69,4 +69,8 @@ class ActivityVerb
          return $verb;
       }
    }
+
+   static function iriType($verb) {
+      return 'http://activitystrea.ms/schema/1.0/' . $verb;
+   }   
 }

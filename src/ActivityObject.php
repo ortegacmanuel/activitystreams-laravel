@@ -108,4 +108,8 @@ class ActivityObject
    static function canonicalType($type) {
       return $type;
    }
+
+   static function iriType($type) {
+      return 'http://activitystrea.ms/schema/1.0/' . $type;
+   }  
 }

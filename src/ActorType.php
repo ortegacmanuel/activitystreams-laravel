@@ -5,9 +5,9 @@ namespace Ortegacmanuel\ActivitystreamsLaravel;
 trait ActorType
 {
 
-	protected $activityStreamsObjectType = 'person';	
+	protected $activityStreamsObjectType = 'person';
 
-	public function asArray()
+	public function asActivityObjectAs()
 	{
 		$object = Array();
 		$object['id'] = $this->activityStreamsId;
@@ -16,6 +16,20 @@ trait ActorType
 		$object['url'] = $this->activityStreamsUrl;		
 		
 		return $object;
+	}
+
+	public function asActivityObjectAtom()
+	{
+		 $autor = '<author>
+  <activity:object-type>' . ActivityObject::iriType($this->activityStreamsObjectType) . '</activity:object-type>
+  <uri>' . $this->activityStreamsId . '</uri>
+  <name>'. $this->activityStreamsDisplayName . '</name>
+  <poco:preferredUsername>'. $this->activityStreamsDisplayName . '</poco:preferredUsername>
+  <poco:displayName>'. $this->activityStreamsDisplayName . '</poco:displayName>
+  <statusnet:profile_info local_id="' . $this->id . '" following="true" blocking="false"></statusnet:profile_info>
+</author>';
+
+		 return $autor;	
 	}
 
 	public function getActivityStreamsObjectType()

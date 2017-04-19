@@ -22,7 +22,7 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
 
         $this->handleConfigs();
         $this->handleMigrations();
-        // $this->handleViews();
+        $this->handleViews();
         // $this->handleTranslations();
         // $this->handleRoutes();
     }
@@ -62,11 +62,15 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'packagename');
     }
 
-    private function handleViews() {
+    private function handleViews() 
+    {
+        $this->loadViewsFrom(__DIR__.'/views','atomfeed');        
 
+        /*
         $this->loadViewsFrom(__DIR__.'/../views', 'packagename');
 
         $this->publishes([__DIR__.'/../views' => base_path('resources/views/vendor/packagename')]);
+        */
     }
 
     private function handleMigrations() 
@@ -90,5 +94,10 @@ class ActivityStreamsServiceProvider extends LaravelServiceProvider {
         {
             return new Activity();
         });
+
+        $this->app->bind('feed', function($app)
+        {
+           return new Feed;
+        });        
     }    
 }
