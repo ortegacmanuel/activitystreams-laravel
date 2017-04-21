@@ -11,7 +11,7 @@ class Feed {
     public $items;
     private $content_type;
 
-    public function render($format = 'atom', $items, $cache = FALSE, $cacheTime = 3600){
+    public function render($format = 'atom', $items, $hublink = '', $feedAutor, $cache = FALSE, $cacheTime = 3600){
         $channel = $this->channel;
         $channel->pubdate = $this->formatDate($this->channel->pubdate,$format);
 
@@ -24,13 +24,13 @@ class Feed {
         if($cache == TRUE && Cache::has('feed-'.$format)) {
             return response()->view('atomfeed::'.$format,Cache::get('feed-'.$format))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
         } elseif($cache == TRUE) {
-            Cache::put('feed-'.$format,compact('channel','items'),$cacheTime);
-            return response()->view('atomfeed::'.$format,compact('channel','items'))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
+            Cache::put('feed-'.$format,compact('channel','items', 'hublink'),$cacheTime);
+            return response()->view('atomfeed::'.$format,compact('channel','items', 'hublink', 'feedAutor'))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
         } elseif($cache == FALSE && Cache::has('feed-'.$format)) {
             Cache::forget('feed-'.$format);
-            return response()->view('atomfeed::'.$format,compact('channel','items'))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
+            return response()->view('atomfeed::'.$format,compact('channel','items', 'hublink', 'feedAutor'))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
         } else {
-            return response()->view('atomfeed::'.$format,compact('channel','items'))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
+            return response()->view('atomfeed::'.$format,compact('channel','items', 'hublink', 'feedAutor'))->header('Content-Type',$this->content_type)->header('Content-Type','text/xml');
         }
         
     }

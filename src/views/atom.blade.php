@@ -13,6 +13,8 @@
         <icon>{{$channel->icon}}</icon>
 @endif
 <updated>{{$channel->pubdate}}</updated>
+{!! $feedAutor->asActivityObjectAtom(); !!}
+{!! $hublink !!}
 @foreach($items as $item)
     {!! $item->asActivityObjectAtom() !!}
 @endforeach
